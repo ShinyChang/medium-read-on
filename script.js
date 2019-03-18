@@ -1,34 +1,27 @@
+const MEDIUM_SITE_SELECTOR =
+  'meta[property="al:android:package"][content="com.medium.reader"]';
+const CONTENT_SELECTOR = ".postArticle-content";
+const PAYWALL_SELECTOR = ".js-paywall";
+
 let fetching = false;
 const load = () => {
-  if (
-    document.head.querySelector(
-      'meta[property="al:android:package"][content="com.medium.reader"]'
-    )
-  ) {
-    if (document.querySelector(".js-paywall")) {
+  if (document.querySelector(MEDIUM_SITE_SELECTOR)) {
+    if (document.querySelector(PAYWALL_SELECTOR)) {
       if (!fetching) {
         fetching = true;
         fetch(window.location.href, {
           mode: "cors",
           credentials: "omit",
-          referrerPolicy: "no-referrer",
-          headers: {
-            Accept:
-              "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-            "upgrade-insecure-requests": 1
-          }
+          referrerPolicy: "no-referrer"
         })
           .then(res => res.text())
           .then(html => {
             fetching = false;
             const doc = new DOMParser().parseFromString(html, "text/html");
-            if (
-              document.querySelector(".section-content") &&
-              doc.querySelector(".section-content")
-            ) {
-              document.querySelector(
-                ".section-content"
-              ).innerHTML = doc.querySelector(".section-content").innerHTML;
+            const content = document.querySelector(CONTENT_SELECTOR);
+            const xhrContent = doc.querySelector(CONTENT_SELECTOR);
+            if (content && xhrContent) {
+              content.innerHTML = xhrContent.innerHTML;
             }
           })
           .catch(() => {

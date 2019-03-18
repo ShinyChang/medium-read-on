@@ -1,6 +1,6 @@
 {
   "name": "Medium read on",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Make sure you can read any article on Medium",
   "manifest_version": 2,
   "background": {
